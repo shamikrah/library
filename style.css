@@ -1,11 +1,12 @@
 :root {
     box-sizing: border-box;
     font-family: Roboto, Courier, monospace;
-    --theme-main-color: rgb(241, 239, 238);
-    --theme-secondary-color: rgb(255, 252, 251);
+    --theme-main-color: rgb(172, 151, 143);
+    --theme-secondary-color: rgb(206, 192, 189);
     --theme-blue: rgb(123, 205, 233);
     --theme-green: rgb(128, 235, 150);
-    --theme-red: rgb(221, 133, 156);
+    --theme-red: rgb(221, 133, 148);
+    --theme-shadow: rgba(0, 0, 0, 0.2);
 }
 
 body {
@@ -16,14 +17,17 @@ body {
 header {
     background-color: var(--theme-secondary-color);
     padding-bottom: 1rem;
-    box-shadow: rgb(197, 197, 197) 0px 1px 4px;
+    box-shadow: var(--theme-shadow) 0px 1px 4px;
 }
 
 h1 {
     font-size: 3.5rem;
     font-weight: bold;
-    padding-top: 1rem;
     text-align: center;
+}
+
+header > h1 {
+    padding-top: 1rem;
 }
 
 main {
@@ -36,14 +40,18 @@ main {
 }
 
 button {
-    border: none;;
+    border: none;
     border-radius: 1rem;
     padding: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     font-family: inherit;
     font-weight: bold;
     background-color: var(--theme-main-color);
     transition: filter 0.3s;
+}
+
+main > button {
+    margin-bottom: 0.8rem;
 }
 
 button:hover {
@@ -52,18 +60,40 @@ button:hover {
 }
 
 button:active {
-    box-shadow: inset 0 1px 1px grey;
+    box-shadow: inset 0 1px 1px var(--theme-shadow);
 }
 
-/* Start form container */
+/* Start modal window */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-overlay.active {
+    display: block;
+}
 
 .form-container {
-    position: absolute;
-    top: 5rem;
-    left: 50rem;
+    position: fixed;
+    opacity: 0.1;
+    transition: opacity 1s ease-in-out;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: var(--theme-secondary-color);
     border-radius: 1rem;
     padding: 1rem;
+    width: min(18rem, 50%);
+}
+
+.form-container.active {
+    opacity: 1;
 }
 
 .form-container h1 {
@@ -116,13 +146,9 @@ label {
     width: 100%;
 }
 
-.hidden {
-    filter: brightness(50%);
-}
-
 .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
     align-self: stretch;
     gap: 2rem;
 }
@@ -135,7 +161,7 @@ label {
     justify-content: center;
     background-color: var(--theme-secondary-color);
     border-radius: 1rem;
-    box-shadow: rgb(197, 197, 197) 0px 1px 4px;
+    box-shadow: var(--theme-shadow) 0px 1px 4px;
 }
 
 .card-item {
