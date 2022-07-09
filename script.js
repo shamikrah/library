@@ -1,20 +1,21 @@
 // Array of books
 let myLibrary = [];
 
+// Index books in myLibrary
+let bookIndex = 0;
+
 // Declare and add listeners to DOM elements
+const newBookBtn = document.querySelector(".new-book");
+newBookBtn.addEventListener("click", displayModal);
 const cardContainer = document.querySelector(".card-container");
+
 const overlay = document.querySelector(".modal-overlay");
 const formContainer = document.querySelector(".form-container");
 const form = document.querySelector(".form");
-form.addEventListener("submit", test);
-const newBookBtn = document.querySelector(".new-book");
-newBookBtn.addEventListener("click", displayModal);
-const title = document.querySelector("#title");
-const author = document.querySelector("#author");
-const pages = document.querySelector("#pages");
-const read = document.querySelector("#read");
+form.addEventListener("submit", addBook);
 const cancelBtn = document.querySelector(".cancel-btn");
 cancelBtn.addEventListener("click", closeModal);
+
 
 // Open modal window
 function displayModal() {
@@ -34,9 +35,6 @@ function Book(title, author, pages, isRead) {
     this.author = author;
     this.pages = pages;
     this.isRead = isRead;
-    this.info = function () {
-        return `Book title is ${title}`;
-    }
 }
 
 // Define function on Book's prototype
@@ -44,54 +42,72 @@ Book.prototype.changeReadStatus = function () {
     this.isRead = !(this.isRead);
 }
 
-function test() {
-    console.log("test");
+// Add book to myLibrary
+function addBook(e) {
+    e.preventDefault();
+    let book = getBookFromInput();
+    console.log(`Title is ${book.title} Author is ${book.author} Pages is ${book.pages} Read is ${book.isRead}`);
+    myLibrary.push(book);
+    displayBooksGrid();
+    form.reset();
+    closeModal();
 }
 
-// Add book to myLibrary
-function addBookToLibrary() {
-    console.log("lol");
-    let currTitle = title.textContent;
-    console.log(currTitle);
-    let currAuthor = author.textContent;
-    console.log(currAuthor);
-    let currPages = pages.textContent;
-    console.log(currPages);
-    let currRead = read.textContent;
-    console.log(currRead);
-    let book = new Book(currTitle, currAuthor, currPages, currRead);
-    myLibrary.push(book);
-    displayBooks();
+// Get new book based off of form input values
+function getBookFromInput() {
+    let title = document.querySelector("#title").value;
+    let author = document.querySelector("#author").value;
+    let pages = parseInt(document.querySelector("#pages").value);
+    let read = ((document.querySelector("#read").value) == "yes") ? true : false;
+    let book = new Book(title, author, pages, read);
+    return book;
 }
 
 // Manually add example books to myLibrary for testing
-const exampleBook = new Book("Harry Potter", "JK Rowling", 100, true);
-myLibrary.push(exampleBook);
+const exampleBook1 = new Book("Harry Potter", "JK Rowling", 100, true);
 const exampleBook2 = new Book("James and the Small Peach", "Roll Daal", 300, false);
-myLibrary.push(exampleBook2);
 const exampleBook3 = new Book("Goosebumps", "That Guy", 50, false);
-myLibrary.push(exampleBook3);
-const exampleBook4 = new Book("Goosebumps", "That Guy", 50, false);
-myLibrary.push(exampleBook4);
-displayBooks();
+const exampleBook4 = new Book("Book", "The Author", 1000, true);
+myLibrary.push(exampleBook1, exampleBook2, exampleBook3, exampleBook4);
+displayBooksGrid();
 
 // Remove book from myLibrary
-function removeBookFromLibrary(book) {
-    for (let i = 0; i < myLibrary.length; i++) {
-        if (i == book) {
-            myLibrary = myLibrary.splice(i, 1);
-        }
+function removeBook(e) {
+    let nextBookIndex = e.target.parentNode.parentNode.dataset.id;
+    myLibrary = myLibrary.filter((book) => { return book != myLibrary[e.target.parentNode.parentNode.dataset.id] });
+    e.target.parentNode.parentNode.remove();
+    let cards = document.querySelectorAll(".card");
+    for (let i = nextBookIndex; i < cards.length; i++) {
+        cards[i].dataset.id = `${parseInt(cards[i].dataset.id) - 1}`;
+    }
+}
+
+function toggleRead(e) {
+    let book = myLibrary[e.target.parentNode.parentNode.dataset.id];
+    let readBtn = e.target;
+    book.changeReadStatus();
+    if (book.isRead) {
+        readBtn.classList.remove("btn-red");
+        readBtn.classList.add("btn-green");
+        readBtn.textContent = `Read`;
+    }
+    else {
+        readBtn.classList.remove("btn-green");
+        readBtn.classList.add("btn-red");
+        readBtn.textContent = `Not Read`;
     }
 }
 
 // Display books on page
-function displayBooks() {
+function displayBooksGrid() {
+    resetBooksGrid();
     for (let book of myLibrary) {
         let card = document.createElement("div");
+        card.dataset.id = `${bookIndex}`;
+        bookIndex++;
+        card.classList.add("card");
         for (let key in book) {
-            //console.log(book[key]);
             if ((key == "title")) {
-                card.classList.add("card");
                 let cardItem = document.createElement("div");
                 cardItem.classList.add("card-item");
                 cardItem.textContent = `"${book.title}"`;
@@ -116,6 +132,7 @@ function displayBooks() {
                 let cardItem = document.createElement("div");
                 cardItem.classList.add("card-item");
                 let readBtn = document.createElement("button");
+                readBtn.addEventListener("click", toggleRead);
                 if (book[key]) {
                     readBtn.classList.add("btn-green");
                     readBtn.textContent = `Read`;
@@ -132,11 +149,20 @@ function displayBooks() {
         let cardItem = document.createElement("div");
         cardItem.classList.add("card-item");
         let deleteBtn = document.createElement("button");
-        deleteBtn.classList.add("btn-grey");
+        deleteBtn.addEventListener("click", removeBook);
+        deleteBtn.classList.add("btn-main-color");
         deleteBtn.textContent = `Delete`;
         cardItem.appendChild(deleteBtn);
         card.appendChild(cardItem);
         cardContainer.appendChild(card);
+    }
+    bookIndex = 0;
+}
+
+// Reset book display
+function resetBooksGrid() {
+    while (cardContainer.hasChildNodes()) {
+        cardContainer.removeChild(cardContainer.lastElementChild);
     }
 }
 

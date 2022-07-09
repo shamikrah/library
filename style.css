@@ -1,11 +1,11 @@
 :root {
     box-sizing: border-box;
     font-family: Roboto, Courier, monospace;
-    --theme-main-color: rgb(172, 151, 143);
-    --theme-secondary-color: rgb(206, 192, 189);
+    --theme-main-color: rgb(219, 178, 157);
+    --theme-secondary-color: rgb(251, 223, 213);
     --theme-blue: rgb(123, 205, 233);
     --theme-green: rgb(128, 235, 150);
-    --theme-red: rgb(221, 133, 148);
+    --theme-red: rgb(221, 133, 142);
     --theme-shadow: rgba(0, 0, 0, 0.2);
 }
 
@@ -50,8 +50,9 @@ button {
     transition: filter 0.3s;
 }
 
-main > button {
+.new-book {
     margin-bottom: 0.8rem;
+    font-size: 1.6rem;
 }
 
 button:hover {
@@ -141,14 +142,14 @@ label {
     width: 100%;
 }
 
-.btn-grey {
+.btn-main-color {
     background-color: var(--theme-main-color);
     width: 100%;
 }
 
 .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     align-self: stretch;
     gap: 2rem;
 }
