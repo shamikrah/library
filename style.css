@@ -1,6 +1,6 @@
 :root {
     box-sizing: border-box;
-    font-family: Roboto, Courier, monospace;
+    font-family: Arial, Courier, monospace;
     --theme-main-color: rgb(219, 178, 157);
     --theme-secondary-color: rgb(251, 223, 213);
     --theme-blue: rgb(123, 205, 233);
@@ -47,7 +47,7 @@ button {
     font-family: inherit;
     font-weight: bold;
     background-color: var(--theme-main-color);
-    transition: filter 0.3s;
+    transition: filter 0.2s;
 }
 
 .new-book {

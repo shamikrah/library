@@ -46,7 +46,6 @@ Book.prototype.changeReadStatus = function () {
 function addBook(e) {
     e.preventDefault();
     let book = getBookFromInput();
-    console.log(`Title is ${book.title} Author is ${book.author} Pages is ${book.pages} Read is ${book.isRead}`);
     myLibrary.push(book);
     displayBooksGrid();
     form.reset();
@@ -67,8 +66,7 @@ function getBookFromInput() {
 const exampleBook1 = new Book("Harry Potter", "JK Rowling", 100, true);
 const exampleBook2 = new Book("James and the Small Peach", "Roll Daal", 300, false);
 const exampleBook3 = new Book("Goosebumps", "That Guy", 50, false);
-const exampleBook4 = new Book("Book", "The Author", 1000, true);
-myLibrary.push(exampleBook1, exampleBook2, exampleBook3, exampleBook4);
+myLibrary.push(exampleBook1, exampleBook2, exampleBook3);
 displayBooksGrid();
 
 // Remove book from myLibrary
@@ -82,6 +80,7 @@ function removeBook(e) {
     }
 }
 
+// Toggle read status of book
 function toggleRead(e) {
     let book = myLibrary[e.target.parentNode.parentNode.dataset.id];
     let readBtn = e.target;
